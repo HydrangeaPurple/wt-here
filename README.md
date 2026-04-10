@@ -23,6 +23,8 @@
 
 **由于项目维护者 [@HydrangeaPurple](https://github.com/HydrangeaPurple/) 正在用 Windows 11，因此保证默认的Mini模式的可用性，TA喜欢使用scoop安装gsudo来获取管理员权限。**
 
+如果你希望包含管理员权限的菜单, 可以增加 `-$WithAdmin` 开关
+
 ### 2.2 Windows Server 2022 安装
 
 Administrator 用户可通过添加自定义路径参数的方式执行脚本：
@@ -32,12 +34,6 @@ Administrator 用户可通过添加自定义路径参数的方式执行脚本：
 .\install.ps1 -CustomPath "C:\Users\Administrator\bin\Microsoft Windows Terminal"
 ```
 
-对于 Windows Server 2022 普通用户，可以通过执行 `$WithNormal` 命令开关的方式，添加两个右键菜单，分别为普通用户和管理员用户，命令如下：
-
-``` powershell
-# 注意替换自定义路径
-.\install.ps1 -CustomPath "D:\Users\newton\bin\Microsoft Windows Terminal" -WithNormal
-```
 
 除此之外，其他细节同普通 Windows 10/11.
 
