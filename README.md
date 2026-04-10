@@ -8,7 +8,7 @@
 2. [安装 PowerShell 7](https://github.com/PowerShell/PowerShell).
 3. 以**管理员身份**启动 PowerShell 7 控制台 (Powershell 5 是**不行**的)，然后运行 `src` 目录下的 `install.ps1` 脚本，将【上下文菜单项】安装到 Windows 资源管理器。现在，菜单项已添加到 Windows 资源管理器上下文菜单了。
 
-![layout](img/default.png)
+![layout](img/default.webp)
 > **图 1**: 三种安装方式，注意，一定要在**管理员模式**下安装，切记！(个人比较喜欢**默认**的 `Mini` 模式)
 
 ## 2. 安装示例
