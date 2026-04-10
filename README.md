@@ -21,7 +21,7 @@
 
 > 如果只运行 `install.ps1` 而不加参数，那么菜单项将以 `Mini` 布局组织。 其他布局（如 `Default` 和 `Flat`）具有不同的外观。 要应用其他布局（如 `Flat`），只需运行 `install.ps1 Flat`。
 
-**由于项目维护者 [@LittleNewton](https://github.com/LittleNewton/) 不喜欢 Windows 11，因此不保证脚本在该系统上的可用性。**
+**由于项目维护者 [@HydrangeaPurple](https://github.com/HydrangeaPurple/) 正在用 Windows 11，因此保证默认的Mini模式的可用性，TA喜欢使用scoop安装gsudo来获取管理员权限。**
 
 ### 2.2 Windows Server 2022 安装
 
