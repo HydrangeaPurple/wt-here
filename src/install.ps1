@@ -15,7 +15,7 @@ param(
     [switch] $PreRelease,
 
     [Parameter()]
-    [switch] $WithNormal
+    [switch] $WithAdmin
 
 )
 
@@ -412,7 +412,7 @@ function CreateProfileMenuItems(
     [Parameter(Mandatory = $true)]
     [bool]$isPreview,
     [Parameter(Mandatory = $false)]
-    [bool] $WithNormal) {
+    [bool] $WithAdmin) {
     $guid = $profile.guid
     $name = $profile.name
     $command = """$executable"" -p ""$name"" -d ""%V."""
@@ -426,13 +426,13 @@ function CreateProfileMenuItems(
         CreateMenuItem $rootKeyElevated $name $profileIcon $elevated $true
     }
     elseif ($layout -eq "Flat") {
-        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin_$guid"                   "在终端中以管理员身份打开" $profileIcon $elevated $true
-        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin_$guid"        "在终端中以管理员身份打开" $profileIcon $elevated $true
-
-        if ($WithNormal) {
-            $normalCommand = "`"$CustomPath\wt.exe`" -d `"%V.`""
-            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal_$guid"                   "在终端中打开" $profileIcon $normalCommand $false
-            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal_$guid"        "在终端中打开" $profileIcon $normalCommand $false
+        $normalCommand = "`"$CustomPath\wt.exe`" -d `"%V.`""
+        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal_$guid"                   "在终端中打开" $profileIcon $normalCommand $false
+        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal_$guid"        "在终端中打开" $profileIcon $normalCommand $false
+        
+        if ($WithAdmin) {
+            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin_$guid"                   "在终端中以管理员身份打开" $profileIcon $elevated $true
+            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin_$guid"        "在终端中以管理员身份打开" $profileIcon $elevated $true
         }
     }
 }
@@ -449,7 +449,7 @@ function CreateMenuItems(
     [Parameter(Mandatory = $true)]
     [bool]$includePreview,
     [Parameter(Mandatory = $false)]
-    [bool] $WithNormal)  {
+    [bool] $WithAdmin) {
     $folder = GetProgramFilesFolder $includePreview
     $localCache = "$Env:LOCALAPPDATA\Microsoft\WindowsApps\Cache"
 
@@ -463,38 +463,38 @@ function CreateMenuItems(
     if ($layout -eq "Default") {
         # defaut layout creates two menus
         New-Item -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal'          -Force | Out-Null
-        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal'  -Name 'MUIVerb'                   -PropertyType String -Value 'Windows Terminal Here' | Out-Null
+        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal'  -Name 'MUIVerb'                   -PropertyType String -Value '终端' | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal'  -Name 'Icon'                      -PropertyType String -Value $icon | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminal'  -Name 'ExtendedSubCommandsKey'    -PropertyType String -Value 'Directory\\ContextMenus\\MenuTerminal' | Out-Null
 
         New-Item -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal'           -Force | Out-Null
-        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal'   -Name 'MUIVerb'                 -PropertyType String -Value 'Windows Terminal Here' | Out-Null
+        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal'   -Name 'MUIVerb'                 -PropertyType String -Value '终端' | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal'   -Name 'Icon'                    -PropertyType String -Value $icon | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminal'   -Name 'ExtendedSubCommandsKey'  -PropertyType String -Value 'Directory\\ContextMenus\\MenuTerminal' | Out-Null
 
         New-Item -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\ContextMenus\MenuTerminal\shell'         -Force | Out-Null
 
         New-Item -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin'                 -Force | Out-Null
-        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin'         -Name 'MUIVerb'                  -PropertyType String -Value '在终端中以管理员身份打开' | Out-Null
+        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin'         -Name 'MUIVerb'                  -PropertyType String -Value '终端(sudo)' | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin'         -Name 'Icon'                     -PropertyType String -Value $icon | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalAdmin'         -Name 'ExtendedSubCommandsKey'   -PropertyType String -Value 'Directory\\ContextMenus\\MenuTerminalAdmin' | Out-Null
 
         New-Item -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin'                -Force | Out-Null
-        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin'        -Name 'MUIVerb'                   -PropertyType String -Value '在终端中以管理员身份打开' | Out-Null
+        New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin'        -Name 'MUIVerb'                   -PropertyType String -Value '终端(sudo)' | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin'        -Name 'Icon'                      -PropertyType String -Value $icon | Out-Null
         New-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalAdmin'        -Name 'ExtendedSubCommandsKey'    -PropertyType String -Value 'Directory\\ContextMenus\\MenuTerminalAdmin' | Out-Null
 
         New-Item -Path 'Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\ContextMenus\MenuTerminalAdmin\shell'               -Force | Out-Null
     }
     elseif ($layout -eq "Mini") {
-        $elevated = "wscript.exe ""$localCache/helper.vbs"" ""$executable"" ""%V."""
-        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalMini_Admin"                        "在终端中以管理员身份打开"        $icon $elevated $true
-        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalMini_Admin"             "在终端中以管理员身份打开"        $icon $elevated $true
-        
-        if ($WithNormal) {
-            $normalCommand = "`"$CustomPath\wt.exe`" -d `"%V.`""
-            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalMini"                        "在终端中打开"        $icon $normalCommand $false
-            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalMini"             "在终端中打开"        $icon $normalCommand $false
+        $normalCommand = "`"$executable`" -d `"%V.`""
+        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalMini"                        "终端"        $icon $normalCommand $false
+        CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalMini"             "终端"        $icon $normalCommand $false
+            
+        if ($WithAdmin) {
+            $elevated = "wscript.exe ""$localCache/helper.vbs"" ""$executable"" ""%V."""
+            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\shell\MenuTerminalMini_Admin"                        "终端(sudo)"        $icon $elevated $true
+            CreateMenuItem "Registry::HKEY_CURRENT_USER\SOFTWARE\Classes\Directory\Background\shell\MenuTerminalMini_Admin"             "终端(sudo)"        $icon $elevated $true
         }
 
         return
@@ -540,7 +540,7 @@ if (-not (Test-Path $executable)) {
 
 # 实际执行语句
 Write-Host "布局风格：$Layout"
-CreateMenuItems $executable $Layout $PreRelease $WithNormal
+CreateMenuItems $executable $Layout $PreRelease $WithAdmin
 Write-Host "Windows Terminal 启动选项已添加到资源管理器右键菜单"
 Write-Host ""
 Write-Host "P.S. 卸载请使用 .\uninstall.ps1 $Layout"
