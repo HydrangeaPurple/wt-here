@@ -13,7 +13,7 @@
 
 ## 2. 安装示例
 
-### 2.1 Windows 10 安装
+### 2.1 Windows 10/11 安装
 
 1. 以管理员身份打开刚安装好的 Powershell Core 7，然后切换工作目录到本库
 2. 确保网络畅通；
@@ -39,7 +39,7 @@ Administrator 用户可通过添加自定义路径参数的方式执行脚本：
 .\install.ps1 -CustomPath "D:\Users\newton\bin\Microsoft Windows Terminal" -WithNormal
 ```
 
-除此之外，其他细节同普通 Windows 10.
+除此之外，其他细节同普通 Windows 10/11.
 
 ## 3. 卸载
 
